@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bidwar.lol - Where Brands Go To War</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Space Grotesk',sans-serif;background:#080808;color:white}
+.syne{font-family:'Syne',sans-serif}
+.glow{box-shadow:0 0 40px rgba(255,215,0,0.4)}
+@keyframes pulse-gold{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+.king{animation:pulse-gold 2s infinite}
+</style>
+</head>
+<body class="min-h-screen">
+<header class="border-b border-zinc-800 sticky top-0 bg-black/80 backdrop-blur z-50">
+<div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+<div class="syne font-black text-2xl">BIDWAR<span class="text-yellow-400">.LOL</span></div>
+<div class="flex gap-2 items-center text-xs"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> LIVE WAR • <span id="totalPot">$12,847</span> POT</div>
+</div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-6">
+<div class="grid lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2">
+<div class="bg-zinc-900 border border-zinc-800 rounded-[24px] p-6 md:p-10">
+<h1 class="syne text-5xl md:text-7xl font-black leading-[0.9]">WHERE<br>BRANDS<br><span class="text-yellow-400">GO TO WAR.</span></h1>
+<p class="mt-4 text-zinc-400">Pay $1 to $1M to put your brand on top. Highest bidder stays KING. Everyone sees you.</p>
+<div class="mt-6 grid grid-cols-3 gap-3 text-center">
+<div class="bg-black rounded-xl p-3"><div class="text-2xl font-bold" id="liveBidders">247</div><div class="text-[10px] text-zinc-500">LIVE BIDDERS</div></div>
+<div class="bg-black rounded-xl p-3"><div class="text-2xl font-bold text-yellow-400" id="topBid">$1,200</div><div class="text-[10px] text-zinc-500">TOP BID</div></div>
+<div class="bg-black rounded-xl p-3"><div class="text-2xl font-bold">24H</div><div class="text-[10px] text-zinc-500">RESET NEVER</div></div>
+</div>
+</div>
+
+<div class="mt-6 bg-zinc-900 border border-yellow-500/50 rounded-[20px] p-1 glow king" id="kingCard">
+<div class="bg-black rounded-[16px] p-5 flex justify-between items-center">
+<div><div class="text-[10px] tracking-widest text-yellow-400">👑 CURRENT KING</div><div class="text-3xl font-black mt-1" id="kingName">Nike - Just Do It</div><div class="text-zinc-400 text-sm" id="kingSlogan">We paid $1,200 to be here. Beat us.</div></div>
+<div class="text-right"><div class="text-3xl font-black text-yellow-400" id="kingPrice">$1,200</div><div class="text-xs text-zinc-500">LEADING</div></div>
+</div>
+</div>
+
+<div class="mt-6 bg-zinc-900 border border-zinc-800 rounded-[20px] overflow-hidden">
+<div class="p-4 flex justify-between"><h3 class="font-bold">LEADERBOARD - LIVE BIDS</h3><span class="text-xs bg-red-500 px-2 py-1 rounded-full">LIVE</span></div>
+<div id="leaderboard" class="divide-y divide-zinc-800"></div>
+</div>
+</div>
+
+<div class="lg:col-span-1">
+<div class="bg-white text-black rounded-[24px] p-6 sticky top-[80px]">
+<h2 class="syne font-black text-2xl">OUTBID THE KING</h2>
+<p class="text-sm text-zinc-600 mt-1">Minimum $1 more than current king.</p>
+<div class="mt-5 space-y-3">
+<input id="brandName" placeholder="Brand Name (e.g. Apple)" class="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 outline-none">
+<input id="slogan" placeholder="Your war cry (e.g. We Run This)" class="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 outline-none">
+<input id="bidAmount" type="number" placeholder="Bid Amount $" class="w-full bg-zinc-100 border border-black rounded-xl px-4 py-4 font-bold text-lg outline-none">
+<button onclick="placeBid()" class="w-full bg-black text-white rounded-xl py-4 font-black text-lg hover:bg-zinc-800">⚔️ DECLARE WAR - PAY & WIN</button>
+<p class="text-[11px] text-zinc-500 text-center">Stripe / Crypto payment. Instant placement. No refund - this is war.</p>
+</div>
+<div class="mt-6 bg-zinc-100 rounded-xl p-4">
+<div class="text-xs font-bold">HOW IT GOES VIRAL:</div>
+<div class="text-xs mt-2 space-y-1 text-zinc-600"><div>✓ Brands flex on Twitter after bidding</div><div>✓ Press covers "Who is spending $5k?"</div><div>✓ You earn 100% of pot</div></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+let bids = JSON.parse(localStorage.getItem('bidwar_v2')||'[]');
+if(bids.length==0){bids=[{name:'Nike - Just Do It',slogan:'We paid $1,200 to be here. Beat us.',amount:1200},{name:'Pepsi',slogan:'Taste of victory',amount:950},{name:'Tesla',slogan:'Electric War',amount:800},{name:'MrBeast Burger',slogan:'I bought the leaderboard',amount:501},{name:'Local Startup',slogan:'Dream big, bid bigger',amount:25}]}
+function render(){bids.sort((a,b)=>b.amount-a.amount);localStorage.setItem('bidwar_v2',JSON.stringify(bids));document.getElementById('kingName').innerText=bids[0].name;document.getElementById('kingSlogan').innerText=bids[0].slogan;document.getElementById('kingPrice').innerText='$'+bids[0].amount;document.getElementById('topBid').innerText='$'+bids[0].amount;document.getElementById('totalPot').innerText='$'+bids.reduce((s,b)=>s+b.amount,0).toLocaleString();document.getElementById('leaderboard').innerHTML=bids.map((b,i)=>`<div class="p-4 flex justify-between items-center ${i==0?'bg-yellow-500/10':''}"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-bold">${i+1}</div><div><div class="font-bold">${b.name} ${i==0?'👑':''}</div><div class="text-xs text-zinc-500">${b.slogan}</div></div></div><div class="font-black">$${b.amount}</div></div>`).join('')}
+function placeBid(){const name=document.getElementById('brandName').value||'Anonymous Brand';const slogan=document.getElementById('slogan').value||'We came to win';const amount=parseInt(document.getElementById('bidAmount').value);if(!amount||amount<=bids[0].amount){alert('BOSS! King er cheye beshi bid korte hobe! Current King $'+bids[0].amount);return}bids.unshift({name,slogan,amount});render();alert('🔥 BOOM! You are now the KING! Screenshot niye Twitter e post koren - VIRAL HOBE!');document.getElementById('brandName').value='';document.getElementById('slogan').value='';document.getElementById('bidAmount').value=''}
+setInterval(()=>{document.getElementById('liveBidders').innerText=Math.floor(240+Math.random()*20)},2000);render();
+</script>
+</body>
+</html>
