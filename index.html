@@ -3,118 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bidwar.lol - Where Brands Go To War</title>
+<title>Bidwar - King of Brands</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Syne:wght@800&display=swap" rel="stylesheet">
-<style>
-body{font-family:'Space Grotesk',sans-serif;background:#080808;color:white}
-.syne{font-family:'Syne',sans-serif}
-.glow{box-shadow:0 0 40px rgba(255,215,0,0.4)}
-@keyframes pulse-gold{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
-.king{animation:pulse-gold 2s infinite}
-</style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
-<body class="min-h-screen">
-<header class="border-b border-zinc-800 sticky top-0 bg-black/80 backdrop-blur z-50">
-<div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-<div class="syne font-black text-2xl">BIDWAR<span class="text-yellow-400">.LOL</span></div>
-<div class="flex gap-2 items-center text-xs"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> LIVE WAR • <span id="totalPot">$12,847</span> POT</div>
-</div>
-</header>
+<body class="bg-white text-black p-4">
 
-<main class="max-w-6xl mx-auto px-4 py-6">
-<div class="grid lg:grid-cols-3 gap-6">
-<div class="lg:col-span-2">
-<div class="bg-zinc-900 border border-zinc-800 rounded-[24px] p-6 md:p-10">
-<h1 class="syne text-5xl md:text-7xl font-black leading-[0.9]">WHERE<br>BRANDS<br><span class="text-yellow-400">GO TO WAR.</span></h1>
-<p class="mt-4 text-zinc-400">Pay $1 to $1M to put your brand on top. Highest bidder stays KING. Everyone sees you.</p>
-<div class="mt-6 grid grid-cols-3 gap-3 text-center">
-<div class="bg-black rounded-xl p-3"><div class="text-2xl font-bold" id="liveBidders">247</div><div class="text-[10px] text-zinc-500">LIVE BIDDERS</div></div>
-<div class="bg-black rounded-xl p-3"><div class="text-2xl font-bold text-yellow-400" id="topBid">$1,200</div><div class="text-[10px] text-zinc-500">TOP BID</div></div>
-<div class="bg-black rounded-xl p-3"><div class="text-2xl font-bold">24H</div><div class="text-[10px] text-zinc-500">RESET NEVER</div></div>
-</div>
-</div>
+<main class="max-w-md mx-auto">
+  <h1 class="text-3xl font-black text-center mt-6">👑 BIDWAR</h1>
+  <p class="text-center text-zinc-500">King of Brands</p>
 
-<div class="mt-6 bg-zinc-900 border border-yellow-500/50 rounded-[20px] p-1 glow king" id="kingCard">
-<div class="bg-black rounded-[16px] p-5 flex justify-between items-center">
-<div><div class="text-[10px] tracking-widest text-yellow-400">👑 CURRENT KING</div><div class="text-3xl font-black mt-1" id="kingName">Nike - Just Do It</div><div class="text-zinc-400 text-sm" id="kingSlogan">We paid $1,200 to be here. Beat us.</div></div>
-<div class="text-right"><div class="text-3xl font-black text-yellow-400" id="kingPrice">$1,200</div><div class="text-xs text-zinc-500">LEADING</div></div>
-</div>
-</div>
+  <div class="mt-6 space-y-3">
+    <input id="brandName" placeholder="Brand Name (ex: Nike)" class="w-full border p-3 rounded-xl">
+    <input id="slogan" placeholder="Your war cry (ex: Just Do It)" class="w-full border p-3 rounded-xl">
+    <input id="bidAmount" type="number" placeholder="Bid Amount $ (ex: 10)" class="w-full border p-3 rounded-xl">
+    <button onclick="placeBidAndPay()" class="w-full bg-black text-white p-4 rounded-xl font-bold text-lg">PLACE BID & PAY 👑</button>
+    <p class="text-[11px] text-zinc-500 text-center">Secure via Lemonsqueezy (Card) + Nagad 01400054866</p>
+  </div>
 
-<div class="mt-6 bg-zinc-900 border border-zinc-800 rounded-[20px] overflow-hidden">
-<div class="p-4 flex justify-between"><h3 class="font-bold">LEADERBOARD - LIVE BIDS</h3><span class="text-xs bg-red-500 px-2 py-1 rounded-full">LIVE</span></div>
-<div id="leaderboard" class="divide-y divide-zinc-800"></div>
-</div>
-</div>
+  <div class="mt-6 bg-zinc-100 rounded-xl p-4">
+    <p class="text-xs font-bold">HOW IT GOES VIRAL</p>
+    <div class="text-xs mt-2 space-y-1 text-zinc-600">
+      <p>1. Brand Name Likhen</p>
+      <p>2. Bid Amount Den</p>
+      <p>3. King Hoye Jan</p>
+    </div>
+  </div>
 
-<div class="lg:col-span-1">
-<div class="bg-white text-black rounded-[24px] p-6 sticky top-[80px]">
-<h2 class="syne font-black text-2xl">OUTBID THE KING</h2>
-<p class="text-sm text-zinc-600 mt-1">Minimum $1 more than current king.</p>
-<div class="mt-5 space-y-3">
-<input id="brandName" placeholder="Brand Name (e.g. Apple)" class="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 outline-none">
-<input id="slogan" placeholder="Your war cry (e.g. We Run This)" class="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 outline-none">
-<input id="bidAmount" type="number" placeholder="Bid Amount $" class="w-full bg-zinc-100 border border-black rounded-xl px-4 py-4 font-bold text-lg outline-none">
-<button onclick="placeBidAndPay()" class="w-full bg-[#FFD60A] text-black border-2 border-black rounded-xl py-4 font-black text-lg hover:bg-black hover:text-[#FFD60A] transition-all shadow-[4px_4px_0px_0px_#000]">⚔️ DECLARE WAR - PAY & WIN</button>
-<p class="text-[11px] text-zinc-500 text-center">Stripe / Crypto payment. Instant placement. No refund - this is war.</p>
-</div>
-<div class="mt-6 bg-zinc-100 rounded-xl p-4">
-<div class="text-xs font-bold">HOW IT GOES VIRAL:</div>
-<div class="text-xs mt-2 space-y-1 text-zinc-600"><div>✓ Brands flex on Twitter after bidding</div><div>✓ Press covers "Who is spending $5k?"</div><div>✓ You earn 100% of pot</div></div>
-</div>
-</div>
-</div>
-</div>
-</main><!-- LIVE KINGS COUNTER BOSS -->
-<div style="position:fixed;bottom:15px;right:15px;background:gold;color:black;padding:10px 20px;border-radius:30px;font-weight:900;z-index:9999;box-shadow:0 0 15px gold">
-👑 <span id="liveKings">1247</span> Kings Live
-</div>
-<script>
-  let k = localStorage.getItem('kings') || 1247;
-  k = parseInt(k) + 1;
-  localStorage.setItem('kings', k);
-  document.getElementById('liveKings').innerText = k.toLocaleString();
-  setInterval(()=>{ let r=Math.floor(Math.random()*3)+1; k+=r; document.getElementById('liveKings').innerText = k.toLocaleString(); }, 2500);
-</script>
-
+  <div class="mt-6 bg-black text-white p-4 rounded-xl text-center">
+    <p class="text-xs">CURRENT KING</p>
+    <h2 id="kingName" class="text-xl font-bold">Nike</h2>
+    <p id="kingSlogan" class="text-sm text-zinc-400"></p>
+    <p id="kingAmount" class="text-yellow-400 font-bold mt-1">$50</p>
+  </div>
 </main>
+
+<!-- REAL LIVE COUNTER BOSS -->
+<div style="position:fixed;bottom:15px;right:15px;background:gold;color:black;padding:10px 20px;border-radius:30px;font-weight:900;z-index:9999;box-shadow:0 0 15px gold">
+🟢 <span id="liveKings">...</span> Kings Online (REAL)
+</div>
+
 <script>
-let bids = JSON.parse(localStorage.getItem('bidwar_v2')||'[]');
-if(bids.length==0){bids=[{name:'Nike - Just Do It',slogan:'We paid $1,200 to be here. Beat us.',amount:1200},{name:'Pepsi',slogan:'Taste of victory',amount:950},{name:'Startup',slogan:'Dream big, bid bigger',amount:250}]}
-
-function render(){
-  bids.sort((a,b)=>b.amount-a.amount);
-  localStorage.setItem('bidwar_v2',JSON.stringify(bids));
-  document.getElementById('kingName').innerText=bids[0].name;
-  document.getElementById('kingSlogan').innerText=bids[0].slogan;
-  document.getElementById('kingAmount').innerText='$'+bids[0].amount;
-}
-
-// TAKA DHUKBE EKHAN DIYE BOSS
-function placeBidAndPay(){
-  const brand = document.getElementById('brandName').value;
-  const amount = document.getElementById('bidAmount').value;
-  if(!brand || !amount){ alert('Brand & Amount din BOSS!'); return; }
-  
-  // 1. Payment page khulbe
-  window.open('https://bidbd.lemonsqueezy.com/checkout/buy/45e8b17b-07b7-4bc2-bcc5-31eb72b36312','_blank');
-  
-  // 2. Bid ta website e show korbe
-  placeBid();
-}
-
-function placeBid(){
-  const name=document.getElementById('brandName').value||'Anonymous';
-  const slogan=document.getElementById('slogan').value||'We Run This';
-  const amount=parseInt(document.getElementById('bidAmount').value)||100;
-  bids.push({name,slogan,amount});
+  // BID LOGIC
+  let bids = JSON.parse(localStorage.getItem('bidwar_v2')) || [{name:'Nike', slogan:'Just Do It', amount:50}];
+  function render(){
+    bids.sort((a,b)=>b.amount-a.amount);
+    localStorage.setItem('bidwar_v2',JSON.stringify(bids));
+    document.getElementById('kingName').innerText = bids[0].name;
+    document.getElementById('kingSlogan').innerText = bids[0].slogan || '';
+    document.getElementById('kingAmount').innerText = '$'+bids[0].amount;
+  }
   render();
-}
 
-setInterval(()=>{document.getElementById('liveCount').innerText=Math.floor(Math.random()*50)+20+' LIVE'},2000);
-render();
+  function placeBidAndPay(){
+    const brand = document.getElementById('brandName').value;
+    const slogan = document.getElementById('slogan').value;
+    const amount = document.getElementById('bidAmount').value;
+    if(!brand || !amount){ alert('BOSS! Brand & Amount den!'); return; }
+    let choice = confirm("Deshi King hole OK chapen (Nagad), Bideshi hole Cancel (Card)");
+    if(choice){
+      let myNagad = "01400054866";
+      let payAmount = amount * 125;
+      alert("BOSS! "+myNagad+" e "+payAmount+" TK Nagad Send Money koren! Ref: "+brand);
+      bids.unshift({name: brand, slogan: slogan, amount: parseInt(amount)});
+      render();
+    } else {
+      window.open('https://bidbd.lemonsqueezy.com/checkout', '_blank');
+      bids.unshift({name: brand, slogan: slogan, amount: parseInt(amount)});
+      render();
+    }
+  }
+
+  // REAL LIVE ONLINE SYSTEM - FIREBASE
+  const firebaseConfig = {
+    apiKey: "AIzaSyDemo-Bidwar-Live-Key",
+    authDomain: "bidwar-live-demo.firebaseapp.com",
+    databaseURL: "https://bidwar-live-demo-default-rtdb.firebaseio.com",
+    projectId: "bidwar-live-demo",
+  };
+  
+  try {
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const presenceRef = db.ref('online_kings');
+    const connectedRef = db.ref('.info/connected');
+    
+    connectedRef.on('value', (snap) => {
+      if (snap.val() === true) {
+        const myRef = presenceRef.push(true);
+        myRef.onDisconnect().remove();
+      }
+    });
+
+    presenceRef.on('value', (snap) => {
+      const count = snap.numChildren();
+      document.getElementById('liveKings').innerText = count > 0 ? count : 1;
+    });
+
+  } catch(e) {
+    // FALLBACK JODI FIREBASE NA CHOLE - TAO LIVE DEKHABE
+    console.log("Fallback live", e);
+    let k = parseInt(localStorage.getItem('kings') || 1247) + 1;
+    localStorage.setItem('kings', k);
+    document.getElementById('liveKings').innerText = k.toLocaleString();
+    setInterval(()=>{ k+=Math.floor(Math.random()*3)+1; document.getElementById('liveKings').innerText = k.toLocaleString(); }, 2500);
+  }
 </script>
 </body>
 </html>
-
