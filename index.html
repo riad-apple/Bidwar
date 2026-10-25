@@ -3,187 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bidwar.lol - Pay to Rank 👑</title>
+<title>Bidwar.lol - Pay to Rank</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:Inter,system-ui}</style>
 </head>
-<body class="bg-[#fcf8f3] text-black">
-<!-- HEADER -->
-<header class="max-w-6xl mx-auto flex justify-between items-center p-4 text-sm">
-  <div class="font-black text-xl">≡ bidwar.lol</div>
-  <div class="flex gap-4 text-zinc-500"><span>Leaderboard</span><span>About</span><span onclick="openAdmin()" class="underline cursor-pointer">Admin:01400054866</span></div>
+<body class="bg-[#fcf8f3]">
+
+<header class="max-w-6xl mx-auto flex justify-between p-4">
+<b>≡ bidwar.lol <span class="text-[10px] bg-red-600 text-white px-2 rounded-full">● LIVE</span></b>
+<span onclick="openAdmin()" class="underline text-xs font-bold cursor-pointer bg-black text-white px-3 py-1 rounded-full">Admin 01400054866</span>
 </header>
 
-<main class="max-w-5xl mx-auto px-4 pb-20">
-  <!-- REAL STATS LIKE OUTBID.LOL -->
-  <div class="text-center">
-    <p class="text-[11px] text-zinc-500"><span class="text-green-600 font-bold">● <span id="onlineCount">528</span> online</span> · <span id="visitorCount">1,078,292</span> visitors since launch · <span id="clicksSent">243</span> clicks sent · see stats →</p>
-  </div>
+<div class="max-w-3xl mx-auto px-4 pb-20">
+<p class="text-center text-[11px] text-zinc-500">● <span id="online" class="text-green-600 font-bold">1 online</span> · <span id="visitors">0</span> visitors · <span id="clicks">0</span> clicks sent · <span id="rev" class="font-black">$0</span></p>
 
-  <!-- CLAIM #1 -->
-  <div class="text-center mt-6">
-    <h1 class="text-4xl md:text-5xl font-black">Claim #1 for <span id="claimPrice" class="text-[#e55]">$14018</span></h1>
-    <p class="text-[11px] text-zinc-500 mt-2">New spots start at $5. Paying less than #1 still puts you on board. Already listed? Enter same URL and outbid yourself.</p>
-  </div>
+<h1 class="text-center text-[44px] font-black mt-6">Claim #1 for <span id="claim" class="text-red-500">$5</span></h1>
+<p class="text-center text-[11px] text-zinc-500">Pay less still ranks. Same URL? Outbid yourself. All REAL.</p>
 
-  <!-- INPUT LIKE OUTBID.LOL -->
-  <div class="mt-6 bg-white p-2 rounded-full border shadow flex">
-    <input id="brandName" placeholder="Your product URL or @handle (ex: joni.ai)" class="flex-1 px-4 py-2 outline-none text-sm rounded-full">
-    <input id="slogan" placeholder="One-liner" class="hidden md:block w-40 px-2 py-2 outline-none text-sm border-l">
-    <input id="bidAmount" type="number" placeholder="$" class="w-20 px-2 py-2 outline-none text-sm border-l">
-    <button onclick="openPay()" class="bg-black text-white px-7 py-2 rounded-full text-sm font-bold">Outbid</button>
-  </div>
-  <p class="text-[10px] text-center text-zinc-400 mt-2">Nagad Personal: 01400054866 (1$ = 125 TK) | Lemon Squeezy Card Ready (verify pending) | Total Revenue: <span id="totalRevenue" class="font-bold text-black">0$</span> / <span id="totalIncome" class="font-bold text-black">0৳</span></p>
+<div class="bg-white border-2 rounded-full flex p-1.5 mt-6">
+<input id="brand" placeholder="Your URL google.com or @handle" class="flex-1 px-4 py-3 outline-none text-sm rounded-full">
+<input id="amount" type="number" placeholder="$" class="w-20 border-l px-3 outline-none font-bold text-center">
+<button onclick="openPay()" class="bg-black text-white px-6 rounded-full font-black">Bid Bidwar</button>
+</div>
+<p class="text-center text-[10px] text-zinc-400 mt-2">Nagad 01400054866 | 1$=125TK | All buttons 100% REAL clickable</p>
 
-  <!-- PODIUM - HOLDING TOP 3 -->
-  <div class="mt-10">
-    <h2 class="font-black text-sm">The podium - Holding the top three <span class="font-normal text-[11px] text-zinc-500">live · refreshes 10s</span></h2>
-    <div id="podium" class="grid grid-cols-3 gap-3 mt-3"></div>
-  </div>
+<div id="podium" class="mt-10"></div>
+<div id="board" class="mt-8"></div>
+</div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 text-xs">
-    <div><p class="font-bold">🔥 Trending right now</p><div id="trendingList" class="mt-2 space-y-2"></div></div>
-    <div><p class="font-bold">+ Latest activity</p><div id="activityList" class="mt-2 space-y-2"></div></div>
-  </div>
+<div id="payModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl p-6 max-w-sm w-full">
+<h2 class="font-black">Pay to Rank 👑</h2>
+<p id="payInfo" class="bg-zinc-100 p-3 rounded-xl mt-3 text-xs"></p>
+<p class="text-[11px] mt-3">Nagad Personal: <b>01400054866</b> e taka pathan</p>
+<input id="trx" placeholder="TrxID den" class="w-full border-2 p-3 rounded-xl mt-2 text-sm">
+<button onclick="submitBid()" class="w-full bg-black text-white p-3 rounded-xl mt-3 font-black">Submit Real Bid</button>
+<button onclick="closePay()" class="w-full bg-zinc-100 p-2 rounded-xl mt-2 text-xs">Cancel</button>
+</div>
+</div>
 
-  <!-- FULL BOARD -->
-  <div class="mt-8">
-    <h2 class="font-black text-sm">Full standings - Every rank on the board - <span id="totalSpots">0</span> spots</h2>
-    <div id="board" class="mt-3 space-y-2"></div>
-  </div>
-
-  <!-- MECHANICS -->
-  <div class="mt-12 bg-white border rounded-2xl p-6">
-    <h2 class="font-black text-lg">How the pay-to-rank board works</h2>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 text-[11px]">
-      <div><p class="font-bold">01. Place your bid</p><p class="text-zinc-500 mt-1">Enter your URL, add one-liner, set price. Console shows which rank you earn.</p></div>
-      <div><p class="font-bold">02. Take the spot</p><p class="text-zinc-500 mt-1">One payment - no subscription. Your listing goes live instantly at rank your money bought.</p></div>
-      <div><p class="font-bold">03. Hold until outbid</p><p class="text-zinc-500 mt-1">Your position is yours until someone pays more. Email notify when outbid (coming).</p></div>
-      <div><p class="font-bold">04. Turn rank into pipeline</p><p class="text-zinc-500 mt-1">Every listing links to your site with full click attribution on your rank.</p></div>
-    </div>
-  </div>
-
-  <!-- MODALS -->
-  <div id="payModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
-      <h2 class="font-black">Pay to be King 👑</h2>
-      <div id="payInfo" class="bg-zinc-100 p-3 rounded-xl mt-3 text-[12px]"></div>
-      <input id="trxId" placeholder="Nagad TrxID (8N7T...)" class="w-full border p-3 rounded-xl mt-3 text-sm">
-      <button onclick="submitBid()" class="w-full bg-[#E2136E] text-white p-3 rounded-xl mt-3 font-black">Submit - Nagad 01400054866</button>
-      <button onclick="payLemon()" class="w-full bg-black text-white p-3 rounded-xl mt-2 font-bold">Pay Card - Lemon Squeezy 💳</button>
-      <button onclick="document.getElementById('payModal').classList.add('hidden')" class="w-full bg-zinc-100 p-2 rounded-xl mt-2 text-xs">Cancel</button>
-    </div>
-  </div>
-
-  <div id="adminModal" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-lg w-full max-h-[80vh] overflow-auto">
-      <h2 class="font-black">Admin - 01400054866</h2>
-      <div id="pendingList" class="mt-4 space-y-2"></div>
-      <button onclick="document.getElementById('adminModal').classList.add('hidden')" class="w-full bg-black text-white p-2 rounded-xl mt-4 text-xs">Close</button>
-    </div>
-  </div>
-</main>
+<div id="adminModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-auto">
+<h2 class="font-black">Admin - REAL</h2>
+<div id="pendingList" class="mt-4"></div>
+<div class="flex gap-2 mt-4">
+<button onclick="clearAll()" class="bg-red-100 text-red-600 px-3 py-2 rounded-xl text-xs">Clear All</button>
+<button onclick="closeAdmin()" class="flex-1 bg-black text-white p-2 rounded-xl text-xs">Close</button>
+</div>
+</div>
+</div>
 
 <script>
-let bids = JSON.parse(localStorage.getItem('bidwar_outbid_full_real')) || [
-  {name:'joni.ai', clicks:4934, amount:14018, time:'4 hours ago', slogan:'Your personal AI computer', status:'approved', trx:'ADMIN'},
-  {name:'outrank.so', clicks:7630, amount:11500, time:'5 hours ago', slogan:'Get traffic & outrank', status:'approved', trx:'ADMIN'},
-  {name:'orynth.dev', clicks:4200, amount:12796, time:'6 hours ago', slogan:'Discover early products', status:'approved', trx:'ADMIN'}
-];
-let pending = JSON.parse(localStorage.getItem('bidwar_pending_full')) || [];
-function save(){ localStorage.setItem('bidwar_outbid_full_real', JSON.stringify(bids)); localStorage.setItem('bidwar_pending_full', JSON.stringify(pending)); }
-
+let bids = JSON.parse(localStorage.getItem('bidwar_REAL_ZERO_V2') || '[]');
+let pending = JSON.parse(localStorage.getItem('bidwar_PENDING_ZERO_V2') || '[]');
+function save(){
+ localStorage.setItem('bidwar_REAL_ZERO_V2', JSON.stringify(bids));
+ localStorage.setItem('bidwar_PENDING_ZERO_V2', JSON.stringify(pending));
+}
 function render(){
-  let approved = bids.filter(b=>b.status==='approved').sort((a,b)=>b.amount-a.amount);
-  save();
-  let totalD = approved.reduce((s,b)=>s+b.amount,0);
-  let totalT = totalD*125;
-  let totalClicks = approved.reduce((s,b)=>s+b.clicks,0);
-  document.getElementById('totalRevenue').innerText = '$'+totalD.toLocaleString();
-  document.getElementById('totalIncome').innerText = totalT.toLocaleString()+'৳';
-  document.getElementById('clicksSent').innerText = totalClicks.toLocaleString();
-  document.getElementById('totalSpots').innerText = approved.length;
-  document.getElementById('claimPrice').innerText = '$'+(approved[0]?.amount+1 || 5);
+ let ok = bids.filter(b=>b.approved).sort((a,b)=>b.amount-a.amount);
+ let total = ok.reduce((s,b)=>s+b.amount,0);
+ document.getElementById('rev').innerText = '$'+total+' / '+(total*125)+'৳';
+ document.getElementById('claim').innerText = '$'+(ok[0]?ok[0].amount+1:5);
+ document.getElementById('clicks').innerText = ok.reduce((s,b)=>s+b.clicks,0);
 
-  // Podium
-  document.getElementById('podium').innerHTML = approved.slice(0,3).map((b,i)=>`
-    <div class="bg-white border-2 ${i==0?'border-red-300 bg-[#ffe9e9] scale-105':'border-zinc-200'} rounded-2xl p-4 text-center">
-      <div class="bg-black text-white w-7 h-7 rounded-full flex items-center justify-center text-xs mx-auto">#${i+1}</div>
-      <p class="font-bold text-sm mt-2 truncate">${b.name}</p>
-      <p class="text-[10px] text-zinc-500 truncate">${b.slogan}</p>
-      <p class="font-black mt-1">$${b.amount.toLocaleString()}</p>
-      <p class="text-[10px] text-zinc-500">● ${b.clicks} clicks</p>
-    </div>
-  `).join('');
+ let pod = document.getElementById('podium');
+ if(ok.length==0){
+  pod.innerHTML = '<h2 class="font-black text-sm">The podium - Top 3</h2><div class="mt-3 bg-white border-2 border-dashed rounded-2xl py-12 text-center text-sm text-zinc-400">EMPTY REAL BOARD<br>Be first for $5 👑<br><span class="text-[11px]">Touch Outbid to rank</span></div>';
+ } else {
+  pod.innerHTML = '<h2 class="font-black text-sm">The podium - Top 3 (Click = Real Visit)</h2><div class="grid grid-cols-3 gap-2 mt-3">'+ok.slice(0,3).map((b,i)=>`<div onclick="goReal(${b.id})" class="cursor-pointer bg-white border-2 ${i==0?'border-red-500 bg-[#ffe9e9] scale-105':''} rounded-2xl p-3 text-center"><div class="bg-black text-white w-6 h-6 rounded-full mx-auto text-xs flex items-center justify-center">#${i+1}</div><p class="font-bold text-xs mt-2 truncate">${b.name}</p><p class="font-black">$${b.amount}</p><p class="text-[10px]">👁️ ${b.clicks}</p></div>`).join('')+'</div>';
+ }
 
-  document.getElementById('board').innerHTML = approved.map((b,i)=>`
-    <div class="bg-white border rounded-2xl p-4 flex justify-between items-center ${i==0?'bg-[#ffe9e9] border-red-200':''}">
-      <div class="flex gap-3 items-center">
-        <div class="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">#${i+1}</div>
-        <div><p class="font-bold text-sm">${b.name}</p><p class="text-[11px] text-zinc-500">${b.slogan} • ${b.time} • Trx:${b.trx}</p></div>
-      </div>
-      <div class="text-right"><p class="font-bold text-sm">$${b.amount.toLocaleString()}</p><p class="text-[10px] text-zinc-500">● ${b.clicks} clicks</p></div>
-    </div>
-  `).join('');
+ let board = document.getElementById('board');
+ if(ok.length==0){
+  board.innerHTML = '<div class="mt-6 bg-white border rounded-2xl py-10 text-center text-sm text-zinc-400">No spots yet - 0/0 - Real bids will appear</div>';
+ } else {
+  board.innerHTML = '<h2 class="font-black text-sm">Full standings - '+ok.length+' spots (All REAL clickable)</h2><div class="mt-3 space-y-2">'+ok.map((b,i)=>`<div onclick="goReal(${b.id})" class="cursor-pointer bg-white border rounded-2xl p-3 flex justify-between items-center hover:border-black"><div class="flex gap-2 items-center"><div class="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">#${i+1}</div><div><p class="font-bold text-sm">${b.name}</p><p class="text-[10px] text-zinc-500">${b.time}</p></div></div><div class="text-right"><p class="font-bold text-sm">$${b.amount}</p><p class="text-[10px]">${b.clicks} clicks →</p></div></div>`).join('')+'</div>';
+ }
 
-  document.getElementById('trendingList').innerHTML = approved.slice(0,3).map(b=>`<div class="flex justify-between bg-white p-2 rounded-lg border"><span>🔥 ${b.name}</span><span class="text-zinc-400">${b.clicks} clicks</span></div>`).join('');
-  document.getElementById('activityList').innerHTML = approved.slice(0,5).map(b=>`<div class="flex gap-2 text-[11px]"><span class="w-5 h-5 bg-zinc-200 rounded-full"></span><span>@${b.name.split('.')[0]} at $${b.amount} • ${b.time}</span></div>`).join('');
-
-  document.getElementById('pendingList').innerHTML = pending.length? pending.map((p,i)=>`
-    <div class="border p-3 rounded-xl bg-yellow-50">
-      <p class="font-bold text-sm">${p.name} - $${p.amount} = ${p.amount*125}৳</p>
-      <p class="text-[11px]">Trx: ${p.trx} • ${p.time} • ${p.slogan}</p>
-      <div class="flex gap-2 mt-2">
-        <button onclick="approveBid(${i})" class="bg-green-600 text-white px-3 py-1 rounded-lg text-xs">✅ Approve</button>
-        <button onclick="rejectBid(${i})" class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs">❌ Reject</button>
-      </div>
-    </div>
-  `).join('') : '<p class="text-xs text-zinc-500">No pending BOSS</p>';
+ document.getElementById('pendingList').innerHTML = pending.length ? pending.map((p,i)=>`<div class="border-2 border-yellow-300 p-3 rounded-xl bg-yellow-50 mb-2"><p class="font-bold text-sm">${p.name} - $${p.amount}=${p.amount*125}TK</p><p class="text-[11px]">Trx: ${p.trx}</p><div class="flex gap-2 mt-2"><button onclick="approve(${i})" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-black">Approve</button><button onclick="reject(${i})" class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs">Reject</button></div></div>`).join('') : '<p class="text-center text-sm text-zinc-400 py-6">No pending - REAL empty</p>';
 }
-render();
-
-// REAL LIVE COUNTERS - 100% REAL
-let baseV = 1078292; let baseO = 528;
-fetch('https://api.countapi.xyz/hit/bidwar-outbid-lol-full-real-01400054866/visits').then(r=>r.json()).then(d=>{
-  document.getElementById('visitorCount').innerText = (baseV + d.value).toLocaleString();
-  baseO = 400 + (d.value % 300);
-  document.getElementById('onlineCount').innerText = baseO;
-}).catch(()=>{
-  document.getElementById('visitorCount').innerText = baseV.toLocaleString();
-});
-setInterval(()=>{ baseO += Math.floor(Math.random()*5)-2; if(baseO<350) baseO=350; document.getElementById('onlineCount').innerText = baseO; render(); }, 10000);
-
-let tempBrand='', tempAmount=0, tempSlogan='';
+function goReal(id){
+ let b = bids.find(x=>x.id===id);
+ if(!b) return;
+ let url = b.name.trim();
+ if(!url.includes('.')) url='https://google.com/search?q='+encodeURIComponent(url);
+ else if(!url.startsWith('http')) url='https://'+url;
+ b.clicks++; save(); render();
+ window.open(url,'_blank');
+}
+let temp={};
 function openPay(){
-  let brand=document.getElementById('brandName').value.trim();
-  let slogan=document.getElementById('slogan').value.trim() || 'King of '+brand;
-  let amount=parseInt(document.getElementById('bidAmount').value);
-  if(!brand||!amount){alert('Brand + Amount den BOSS!'); return;}
-  // Already listed logic
-  let existing = bids.find(b=>b.name.toLowerCase()===brand.toLowerCase());
-  if(existing){ if(amount <= existing.amount){ alert('BOSS same URL! Outbid korte hole $'+(existing.amount+1)+' er besi dite hobe!'); return; } }
-  tempBrand=brand; tempAmount=amount; tempSlogan=slogan;
-  document.getElementById('payInfo').innerHTML = `Brand: ${brand}<br>Slogan: ${slogan}<br>Amount: $${amount} = ${amount*125} TK<br>Nagad: 01400054866<br>Ref: ${brand}`;
-  document.getElementById('payModal').classList.remove('hidden');
+ let n=document.getElementById('brand').value.trim();
+ let a=parseInt(document.getElementById('amount').value);
+ if(!n||!a){alert('URL + $ den! ex: google.com + 5');return;}
+ temp={name:n,amount:a,id:Date.now()};
+ document.getElementById('payInfo').innerHTML='Brand: <b>'+n+'</b><br>Amount: <b>$'+a+' = '+(a*125)+'TK</b>';
+ document.getElementById('payModal').classList.remove('hidden');
 }
+function closePay(){document.getElementById('payModal').classList.add('hidden');}
 function submitBid(){
-  let trx=document.getElementById('trxId').value.trim();
-  if(!trx){alert('TrxID den BOSS!'); return;}
-  pending.unshift({name:tempBrand, amount:tempAmount, slogan:tempSlogan, trx:trx, time:'just now', clicks:Math.floor(Math.random()*1000)+100, status:'pending'});
-  save(); document.getElementById('payModal').classList.add('hidden');
-  alert('Pending e gelo BOSS! Admin e giye approve koren!'); 
-  document.getElementById('brandName').value=''; document.getElementById('bidAmount').value=''; document.getElementById('trxId').value=''; document.getElementById('slogan').value='';
-  render();
-}
-function payLemon(){
-  alert('Card verify pending BOSS! Ekhon Nagad e den: 01400054866');
-  submitBid();
+ let trx=document.getElementById('trx').value.trim();
+ if(!trx){alert('TrxID den!');return;}
+ pending.unshift({name:temp.name,amount:temp.amount,trx:trx,time:'just now',clicks:0,approved:false,id:temp.id});
+ save(); closePay(); render();
+ alert('Submit hoise! Admin e Approve koren!');
+ document.getElementById('brand').value='';document.getElementById('amount').value='';document.getElementById('trx').value='';
 }
 function openAdmin(){
-  let p=prompt('Admin Pass? (01400054866)');
-  if(p==='01400054866' || p==='riad' || p==='admin'){ document.getElementById('adminModal').classList.remove('hidden'); render(); } else alert('Wrong!');
+ let p=prompt('Password?');
+ if(p==='01400054866'||p==='riad'){document.getElementById('adminModal').classList.remove('hidden');render();}
 }
-function approveBid(i){ let p=pending[i]; p.status='approved'; p.time='just now'; bids.push(p); pending.splice(i,1); save(); render(); alert('Approved BOSS!'); }
-function rejectBid(i){ pending.splice(i,1); save(); render(); }
+function closeAdmin(){document.getElementById('adminModal').classList.add('hidden');}
+function approve(i){let p=pending[i];p.approved=true;p.clicks=0;bids.push(p);pending.splice(i,1);save();render();}
+function reject(i){pending.splice(i,1);save();render();}
+function clearAll(){if(confirm('Clear all real data?')){bids=[];pending=[];save();render();}}
+render();
+fetch('https://api.countapi.xyz/hit/bidwar-real-zero-v2-riad/visits').then(r=>r.json()).then(d=>{document.getElementById('visitors').innerText=d.value;document.getElementById('online').innerText=1+Math.floor(d.value/20);}).catch(()=>{});
 </script>
 </body>
 </html>
