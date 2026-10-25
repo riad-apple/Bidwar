@@ -56,7 +56,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#080808;color:white}
 <input id="brandName" placeholder="Brand Name (e.g. Apple)" class="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 outline-none">
 <input id="slogan" placeholder="Your war cry (e.g. We Run This)" class="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 outline-none">
 <input id="bidAmount" type="number" placeholder="Bid Amount $" class="w-full bg-zinc-100 border border-black rounded-xl px-4 py-4 font-bold text-lg outline-none">
-<button onclick="placeBid()" class="w-full bg-black text-white rounded-xl py-4 font-black text-lg hover:bg-zinc-800">⚔️ DECLARE WAR - PAY & WIN</button>
+<button onclick="placeBidAndPay()" class="w-full bg-[#FFD60A] text-black border-2 border-black rounded-xl py-4 font-black text-lg hover:bg-black hover:text-[#FFD60A] transition-all shadow-[4px_4px_0px_0px_#000]">⚔️ DECLARE WAR - PAY & WIN</button>
 <p class="text-[11px] text-zinc-500 text-center">Stripe / Crypto payment. Instant placement. No refund - this is war.</p>
 </div>
 <div class="mt-6 bg-zinc-100 rounded-xl p-4">
@@ -69,10 +69,40 @@ body{font-family:'Space Grotesk',sans-serif;background:#080808;color:white}
 </main>
 <script>
 let bids = JSON.parse(localStorage.getItem('bidwar_v2')||'[]');
-if(bids.length==0){bids=[{name:'Nike - Just Do It',slogan:'We paid $1,200 to be here. Beat us.',amount:1200},{name:'Pepsi',slogan:'Taste of victory',amount:950},{name:'Tesla',slogan:'Electric War',amount:800},{name:'MrBeast Burger',slogan:'I bought the leaderboard',amount:501},{name:'Local Startup',slogan:'Dream big, bid bigger',amount:25}]}
-function render(){bids.sort((a,b)=>b.amount-a.amount);localStorage.setItem('bidwar_v2',JSON.stringify(bids));document.getElementById('kingName').innerText=bids[0].name;document.getElementById('kingSlogan').innerText=bids[0].slogan;document.getElementById('kingPrice').innerText='$'+bids[0].amount;document.getElementById('topBid').innerText='$'+bids[0].amount;document.getElementById('totalPot').innerText='$'+bids.reduce((s,b)=>s+b.amount,0).toLocaleString();document.getElementById('leaderboard').innerHTML=bids.map((b,i)=>`<div class="p-4 flex justify-between items-center ${i==0?'bg-yellow-500/10':''}"><div class="flex gap-3 items-center"><div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-bold">${i+1}</div><div><div class="font-bold">${b.name} ${i==0?'👑':''}</div><div class="text-xs text-zinc-500">${b.slogan}</div></div></div><div class="font-black">$${b.amount}</div></div>`).join('')}
-function placeBid(){const name=document.getElementById('brandName').value||'Anonymous Brand';const slogan=document.getElementById('slogan').value||'We came to win';const amount=parseInt(document.getElementById('bidAmount').value);if(!amount||amount<=bids[0].amount){alert('BOSS! King er cheye beshi bid korte hobe! Current King $'+bids[0].amount);return}bids.unshift({name,slogan,amount});render();alert('🔥 BOOM! You are now the KING! Screenshot niye Twitter e post koren - VIRAL HOBE!');document.getElementById('brandName').value='';document.getElementById('slogan').value='';document.getElementById('bidAmount').value=''}
-setInterval(()=>{document.getElementById('liveBidders').innerText=Math.floor(240+Math.random()*20)},2000);render();
+if(bids.length==0){bids=[{name:'Nike - Just Do It',slogan:'We paid $1,200 to be here. Beat us.',amount:1200},{name:'Pepsi',slogan:'Taste of victory',amount:950},{name:'Startup',slogan:'Dream big, bid bigger',amount:250}]}
+
+function render(){
+  bids.sort((a,b)=>b.amount-a.amount);
+  localStorage.setItem('bidwar_v2',JSON.stringify(bids));
+  document.getElementById('kingName').innerText=bids[0].name;
+  document.getElementById('kingSlogan').innerText=bids[0].slogan;
+  document.getElementById('kingAmount').innerText='$'+bids[0].amount;
+}
+
+// TAKA DHUKBE EKHAN DIYE BOSS
+function placeBidAndPay(){
+  const brand = document.getElementById('brandName').value;
+  const amount = document.getElementById('bidAmount').value;
+  if(!brand || !amount){ alert('Brand & Amount din BOSS!'); return; }
+  
+  // 1. Payment page khulbe
+  window.open('https://bidbd.lemonsqueezy.com/checkout/buy/45e8b17b-07b7-4bc2-bcc5-31eb72b36312','_blank');
+  
+  // 2. Bid ta website e show korbe
+  placeBid();
+}
+
+function placeBid(){
+  const name=document.getElementById('brandName').value||'Anonymous';
+  const slogan=document.getElementById('slogan').value||'We Run This';
+  const amount=parseInt(document.getElementById('bidAmount').value)||100;
+  bids.push({name,slogan,amount});
+  render();
+}
+
+setInterval(()=>{document.getElementById('liveCount').innerText=Math.floor(Math.random()*50)+20+' LIVE'},2000);
+render();
 </script>
 </body>
 </html>
+
