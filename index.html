@@ -66,6 +66,18 @@ body{font-family:'Space Grotesk',sans-serif;background:#080808;color:white}
 </div>
 </div>
 </div>
+</main><!-- LIVE KINGS COUNTER BOSS -->
+<div style="position:fixed;bottom:15px;right:15px;background:gold;color:black;padding:10px 20px;border-radius:30px;font-weight:900;z-index:9999;box-shadow:0 0 15px gold">
+👑 <span id="liveKings">1247</span> Kings Live
+</div>
+<script>
+  let k = localStorage.getItem('kings') || 1247;
+  k = parseInt(k) + 1;
+  localStorage.setItem('kings', k);
+  document.getElementById('liveKings').innerText = k.toLocaleString();
+  setInterval(()=>{ let r=Math.floor(Math.random()*3)+1; k+=r; document.getElementById('liveKings').innerText = k.toLocaleString(); }, 2500);
+</script>
+
 </main>
 <script>
 let bids = JSON.parse(localStorage.getItem('bidwar_v2')||'[]');
